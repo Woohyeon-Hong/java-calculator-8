@@ -14,6 +14,23 @@ public class InputView {
     }
 
 
+    public Numbers readInputString() {
+        String input = Console.readLine();
+        return extractNumbers(input);
+    }
+
+    public Numbers extractNumbers(String input) {
+        if (!isStartWithDoubleSlash(input)) {
+            validateUnsupportedDelimiter(input);
+            List<Double> numberList = splitWithDelimiters(input);
+            validateNumbers(numberList);
+
+            return new Numbers(numberList);
+        }
+
+        return null;
+    }
+
     private boolean isStartWithDoubleSlash(String input) {
         return input.startsWith("//");
     }
@@ -44,4 +61,25 @@ public class InputView {
         return (target >= 48 && target <= 57);
     }
 
+    private List<Double> splitWithDelimiters(String input) {
+        List<Double> numberList = new ArrayList<>();
+
+        String[] splits = input.split(delimiters);
+        for (String split : splits) {
+            if (split.isEmpty()) continue;
+
+            double number = Double.parseDouble(split);
+            numberList.add(number);
+        }
+
+        return numberList;
+    }
+
+    private void validateNumbers(List<Double> numberList) {
+        for (double number : numberList) {
+            if (number <= 0) {
+                throw new IllegalArgumentException("0이나 음수가 입력됐습니다.");
+            }
+        }
+    }
 }
