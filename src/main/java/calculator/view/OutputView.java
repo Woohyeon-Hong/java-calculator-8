@@ -4,22 +4,23 @@ import calculator.model.Numbers;
 
 public class OutputView {
 
+    private static final String START_PROMPT = "덧셈할 문자열을 입력해 주세요.";
+    private static final String RESULT_PREFIX = "결과 : ";
+
     public OutputView() {
     }
-
-    //todo: promt를 변수로 분리
+    
     public void printCalculatorStartPrompt() {
-        System.out.println("덧셈할 문자열을 입력해 주세요.");
+        System.out.println(START_PROMPT);
     }
 
     public void printResult(Numbers numbers) {
         double result = numbers.getSum();
 
-        System.out.print("결과 : ");
         if (result == (int) result) {
-            System.out.println((int)result);
+            System.out.println(RESULT_PREFIX + (int) result);
         } else {
-            System.out.printf("%.1f", result);
+            System.out.printf(RESULT_PREFIX + "%.1f", result);
         }
     }
 }
