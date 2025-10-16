@@ -9,18 +9,23 @@ public class OutputView {
 
     public OutputView() {
     }
-    
+
     public void printCalculatorStartPrompt() {
         System.out.println(START_PROMPT);
     }
 
     public void printResult(Numbers numbers) {
         double result = numbers.getSum();
+        printResultPrefix();
+        printResultValue(result);
+    }
 
-        if (result == (int) result) {
-            System.out.println(RESULT_PREFIX + (int) result);
-        } else {
-            System.out.printf(RESULT_PREFIX + "%.1f", result);
-        }
+    private static void printResultPrefix() {
+        System.out.print(RESULT_PREFIX);
+    }
+
+    private static void printResultValue(double result) {
+        String resultValue = result % 1.0 == 0.0 ? String.format("%.0f", result) : String.format("%.1f", result);
+        System.out.println(resultValue);
     }
 }
