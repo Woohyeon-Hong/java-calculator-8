@@ -18,5 +18,6 @@ public class CalculatorController {
         outputView.printCalculatorStartPrompt();
         Numbers numbers = inputView.readInputString();
         numbers.addNumberListValues();
+        outputView.printResult(numbers);
     }
 }
