@@ -10,7 +10,7 @@ public class InputView {
     private String delimiters;
 
     public InputView() {
-        delimiters = "[,:]";
+        delimiters = ",|:";
     }
 
 
@@ -20,19 +20,48 @@ public class InputView {
     }
 
     public Numbers extractNumbers(String input) {
-        if (!isStartWithDoubleSlash(input)) {
-            validateUnsupportedDelimiter(input);
-            List<Double> numberList = splitWithDelimiters(input);
-            validateNumbers(numberList);
-
-            return new Numbers(numberList);
+        if (isStartWithDoubleSlash(input)) {
+            input = registerCustomDelimiters(input);
         }
 
-        return null;
+        validateUnsupportedDelimiter(input);
+        List<Double> numberList = splitWithDelimiters(input);
+        validateNumbers(numberList);
+
+        return new Numbers(numberList);
     }
 
     private boolean isStartWithDoubleSlash(String input) {
         return input.startsWith("//");
+    }
+
+    private String registerCustomDelimiters(String input) {
+        List<Character> customDelimiters = new ArrayList<Character>();
+
+        for (int i = 0; i <= input.length() - 5; i += 5) {
+            if (isDigit(input.charAt(i))) break;
+
+            String prefix = input.substring(i, i + 2);
+            String suffix = input.substring(i + 3, i + 5);
+
+            if (!prefix.equals("//") || !suffix.equals("\\n")) {
+                throw new IllegalArgumentException("커스텀 구분자 등록 형식이 잘못됐습니다.: " + input.substring(i, i + 5));
+            }
+
+            customDelimiters.add(input.charAt(i + 2));
+        }
+
+        for (Character customDelimiter : customDelimiters) {
+            if (isDigit(customDelimiter)) {
+                throw new IllegalArgumentException("커스텀 구분자로 숫자를 입력했습니다.: " + (customDelimiter - 45));
+            }
+        }
+
+        for (Character customDelimiter : customDelimiters) {
+            delimiters = delimiters + ("|" + customDelimiter);
+        }
+
+        return input.substring(5 * customDelimiters.size());
     }
 
     private void validateUnsupportedDelimiter(String input) {
@@ -43,7 +72,7 @@ public class InputView {
             if (inputChar == '.') continue;
 
             boolean isProper = false;
-            for (int i = 1; i < delimiters.length() - 1; i ++) {
+            for (int i = 0; i < delimiters.length(); i += 2) {
                 if (inputChar == delimiters.charAt(i)) {
                     isProper = true;
                     break;
