@@ -16,7 +16,10 @@ public class CalculatorController {
 
     public void calculate() {
         outputView.printCalculatorStartPrompt();
-        Numbers numbers = inputView.readInputString();
+        String input = inputView.readInputString();
+
+        Numbers numbers = new Numbers(input);
+        numbers.extractNumbers();
         numbers.addNumberListValues();
         outputView.printResult(numbers);
     }
