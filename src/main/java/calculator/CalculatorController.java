@@ -26,7 +26,7 @@ public class CalculatorController {
 
         numbers.extractNumbers();
         numbers.addNumberListValues();
-        
+
         return numbers;
     }
 }
