@@ -14,13 +14,19 @@ public class CalculatorController {
         outputView = new OutputView();
     }
 
-    public void calculate() {
+    public void run() {
         outputView.printCalculatorStartPrompt();
         String input = inputView.readInputString();
+        Numbers numbers = calculate(input);
+        outputView.printResult(numbers);
+    }
 
+    private Numbers calculate(String input) {
         Numbers numbers = new Numbers(input);
+
         numbers.extractNumbers();
         numbers.addNumberListValues();
-        outputView.printResult(numbers);
+        
+        return numbers;
     }
 }
