@@ -2,6 +2,7 @@ package calculator.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class Numbers {
 
@@ -94,7 +95,8 @@ public class Numbers {
 
     private void addCustomDelimiters(List<Character> customDelimiters) {
         for (Character customDelimiter : customDelimiters) {
-            delimiters += ("|" + customDelimiter);
+            //이스케이프 처리 필요시, 이스케이프 처리
+            delimiters += ("|" + Pattern.quote(String.valueOf(customDelimiter)));
         }
     }
 
@@ -132,8 +134,8 @@ public class Numbers {
 
     private void validateCustomDelimiterValue(List<Character> customDelimiters) {
         for (Character customDelimiter : customDelimiters) {
-            if (isDigit(customDelimiter)) {
-                throw new IllegalArgumentException("커스텀 구분자로 숫자를 입력했습니다: " + (customDelimiter - 45));
+            if (isDigit(customDelimiter) || customDelimiter == '.') {
+                throw new IllegalArgumentException("커스텀 구분자로 잘못된 값을 입력했습니다");
             }
         }
     }
