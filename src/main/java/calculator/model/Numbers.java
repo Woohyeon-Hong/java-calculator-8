@@ -13,12 +13,14 @@ public class Numbers {
     public Numbers(String input) {
         this.input = input;
 
+        //각 구분자는 '|"로 구분됨
         this.delimiters = ",|:";
         this.numberList = new ArrayList<>();
         this.sum = 0.0;
     }
 
     public void extractNumbers() {
+        //custom delimiter 처리
         if (hasCustomDelimiter()) {
             registerCustomDelimiters();
         }
@@ -62,7 +64,10 @@ public class Numbers {
 
     private void splitWithDelimiters() {
         String[] splits = input.split(delimiters);
+
         for (String split : splits) {
+
+            //빈 값은 생략 ex) "1,,2" |  ","
             if (split.isEmpty()) {
                 continue;
             }
@@ -75,7 +80,7 @@ public class Numbers {
     private void validateNumbers() {
         for (double number : numberList) {
             if (number <= 0) {
-                throw new IllegalArgumentException("0이나 음수가 입력됐습니다.");
+                throw new IllegalArgumentException("0이나 음수가 입력됐습니다");
             }
         }
     }
@@ -94,10 +99,12 @@ public class Numbers {
     }
 
     private void removeCustomDelimiterSection(int customDelimitersNum) {
+        //각 커스텀 구분자 등록은 5 개의 문자로 구성되기 때문에, 5 * customDelimiterNum(등록한 커스텀 구분자 개수) 길이의 문자열을 삭제
         input = input.substring(5 * customDelimitersNum);
     }
 
     private void validateCharacter(char inputChar) {
+        //1.25의 "1"이나 "."과 같이 수를 구성하는 요소가 아니면서, 등록된 구분자도 아니면 예외 처리
         if (!isPartOfNumber(inputChar) && !isRegisteredAsDelimiter(inputChar)) {
             throw new IllegalArgumentException("잘못된 구분자가 사용되었습니다: " + inputChar);
         }
@@ -109,13 +116,16 @@ public class Numbers {
                 break;
             }
 
+            //prefix: "//" -> 2글자
             String prefix = input.substring(i, i + 2);
+            //suffix: "\n" -> 2글자
             String suffix = input.substring(i + 3, i + 5);
 
             if (!prefix.equals("//") || !suffix.equals("\\n")) {
-                throw new IllegalArgumentException("커스텀 구분자 등록 형식이 잘못됐습니다.: " + input.substring(i, i + 5));
+                throw new IllegalArgumentException("커스텀 구분자 등록 형식이 잘못됐습니다: " + input.substring(i, i + 5));
             }
 
+            //등록할 구분자는 커스텀 구분자 등록 형식의 3 번째에 위치
             customDelimiters.add(input.charAt(i + 2));
         }
     }
@@ -123,7 +133,7 @@ public class Numbers {
     private void validateCustomDelimiterValue(List<Character> customDelimiters) {
         for (Character customDelimiter : customDelimiters) {
             if (isDigit(customDelimiter)) {
-                throw new IllegalArgumentException("커스텀 구분자로 숫자를 입력했습니다.: " + (customDelimiter - 45));
+                throw new IllegalArgumentException("커스텀 구분자로 숫자를 입력했습니다: " + (customDelimiter - 45));
             }
         }
     }
@@ -144,6 +154,13 @@ public class Numbers {
     }
 
     private boolean isDigit(char target) {
+        /**
+         * ASCII 코드
+         * 0: 48
+         * 1: 49
+         * ...
+         * 9: 57
+         */
         return (target >= 48 && target <= 57);
     }
 }
