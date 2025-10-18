@@ -49,7 +49,7 @@ public class Numbers {
     }
 
     private void registerCustomDelimiters() {
-        List<Character> customDelimiterCandidates = validateCustomDelimiters();
+        List<Character> customDelimiterCandidates = extractDelimiterCandidates();
         addCustomDelimiters(customDelimiterCandidates);
         removeCustomDelimiterSection(customDelimiterCandidates.size());
     }
@@ -85,7 +85,7 @@ public class Numbers {
         }
     }
 
-    private List<Character> validateCustomDelimiters() {
+    private List<Character> extractDelimiterCandidates() {
         List<Character> customDelimiterCandidates = new ArrayList<>();
         validateCustomDelimiterFormat(customDelimiterCandidates);
         validateCustomDelimiterValue(customDelimiterCandidates);
